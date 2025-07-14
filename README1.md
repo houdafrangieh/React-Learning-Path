@@ -12,3 +12,5 @@
 - **Code:** [src\App.jsx](Added the functions App, Button, Page)
 - **Notes:** Practiced functions rendering and JSX syntax 
 
+### **Day 3: Fragment function 14-July-2025**
+-**Concepts:** How to render with siblings wihtout errors
