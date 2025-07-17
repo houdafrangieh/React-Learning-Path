@@ -1,36 +1,87 @@
+// Basic To-Do List App with React Hooks and Routing (Single Page)
+
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 function App() {
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>It Works! 🎉</h1>
-      <p>Welcome on board for this new journey!!</p>
-      <Button />
-      <Page></Page> {/* I can also add it this way and write sthg inside but it doesn't show on the page*/}
+    <Router>
+      <div className="min-h-screen bg-gray-100 p-6">
+        <h1 className="text-3xl font-bold text-center mb-6">To-Do List</h1>
+        <Routes>
+          <Route path="/" element={<TodoPage />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+function TodoPage() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
+
+  const addTask = () => {
+    if (!newTask.trim()) return;
+    setTasks([...tasks, { id: Date.now(), text: newTask, done: false }]);
+    setNewTask('');
+  };
+
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, done: !task.done } : task
+    ));
+  };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  return (
+    <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6">
+      <div className="flex gap-2 mb-4">
+        <input
+          className="flex-grow border rounded px-3 py-2"
+          type="text"
+          placeholder="New task..."
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+        />
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={addTask}
+        >
+          Add
+        </button>
+      </div>
+      <ul>
+        {tasks.length === 0 && (
+          <li className="text-gray-500 text-center">No tasks yet.</li>
+        )}
+        {tasks.map(task => (
+          <li
+            key={task.id}
+            className="flex justify-between items-center border-b py-2"
+          >
+            <span
+              className={`cursor-pointer ${task.done ? 'line-through text-gray-500' : ''}`}
+              onClick={() => toggleTask(task.id)}
+            >
+              {task.text}
+            </span>
+            <button
+              onClick={() => deleteTask(task.id)}
+              className="text-red-500 hover:text-red-700"
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-function Button(){
-  return(
-    <button>Click Here👍</button>
-  );
-}
-
-function Page(){
-  return (
-    <>
-      <header>
-        <h1>Reasons I want to learn React ⚛️</h1>
-      </header>
-    <ol>
-      <li>I am learning React to use it during my internship</li>
-      <li>I also want to finish my web developper path</li>
-      <li>To have another career I can rely on while in college🤗</li>
-    </ol>
-     <footer>All rights reserved ©</footer>
-    </>
-  );
-}
-
 export default App;
+
 
 
